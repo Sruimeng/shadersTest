@@ -47,15 +47,14 @@
             projectSevice.sceneSevice.prototype.start(params);
             document.getElementById("WebGLOutput").appendChild(params.renderer.domElement);
             var uniforms={
-                
+
             };
-            console.log(projectShader.nomalShader_v);
             var shader ={
                 vertexShader: projectShader.nomalShader_v,
                 fragmentShader: projectShader.nomalShader_f,
             };
             var material = new THREE.ShaderMaterial(shader); //重置纹理
-            var geo = new THREE.BoxGeometry(2, 2, 2);
+            var geo = new THREE.BoxGeometry(20, 20, 20  );
             var mesh=new THREE.Mesh(geo,material);
             params.scene.add(mesh);
             console.log( material);

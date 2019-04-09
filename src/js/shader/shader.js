@@ -29,6 +29,9 @@ projectShader.nomalShader_v = `
 projectShader.nomalShader_f = `
                 varying vec2 img;
                 void main() {
-                    gl_FragColor = vec4(img.x, img.x, img.x, 1.0);
+                    float red = img.x-img.y;
+                    float green = img.x + img.y;
+
+                    gl_FragColor = vec4(red, green, green, 1.0);
                 }
             `;
