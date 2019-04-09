@@ -1,14 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <title>Document</title>
+    <script src="js/three.js"></script>
+    <script src="js/WebGL.js"></script>
+    <script src="js/Tween.js"></script>
+    <script src="js/stats.min.js"></script>
+    <script src="js/PMREMGenerator.js"></script>
+    <script src="js/PMREMCubeUVPacker.js"></script>
+    <script src="js/inflate.min.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="src/js/sevice/meshSevice.js"></script>
+    <script src="src/js/sevice/textSevice.js"></script>
+    <script src="src/js/sevice/sceneSevice.js"></script>
+    <script src="src/js/sevice/pageSevice.js"></script>
+    <script src="src/js/sevice/animationSevice.js"></script>
+    <script src="src/js/sevice/buttonSevice.js"></script>
+
+    <script src="src/js/util/meshUtil.js"></script>
+    <script src="src/js/util/sceneUtil.js"></script>
+    <script src="src/js/util/textUtil.js"></script>
+    <script src="src/js/util/animationUtil.js"></script>
+    <script src="src/js/util/pageUtil.js"></script>
+
+    <script src="src/js/shader/volumetricFog.js"></script>
 </head>
+
 <body>
+    <div id="WebGLOutput" class="webgl"></div>
     <script>
-        console.log( window.devicePixelRatio);
+        var params = projectParams.getParams();
+        function init() {
+            //判断浏览器是否支持webgl
+            if (WEBGL.isWebGLAvailable() === false) {
+                document.body.appendChild(WEBGL.getWebGLErrorMessage());
+            }
+
+            projectSevice.sceneSevice.prototype.initScene();
+            projectSevice.sceneSevice.prototype.start(params);
+            document.getElementById("WebGLOutput").appendChild(params.renderer.domElement);
+            var uniforms={
+
+            };
+            var shader ={
+                vertexShader:volumetricFog_v,
+                fragmentShader:volumetricFog_f,
+            };
+            var material = new THREE.ShaderMaterial(shader); //重置纹理
+            var geo = new THREE.BoxGeometry(2, 2, 2);
+            var mesh=new THREE.Mesh(geo,material);
+            params.scene.add(mesh);
+            console.log( params.scene);
+        }
+
+        window.onload = init; //当网页加载后执行init方法
     </script>
 </body>
+
 </html>

@@ -26,6 +26,7 @@ Animation.prototype = {
     }
 };
 
+
 function milliSecond(time) {
     if(isNumber(time)){
         return time;
