@@ -1,6 +1,7 @@
 var projectUtil = {};
 var projectSevice = {};
 var projectData = {};
+var projectShader={};
 var projectParams = (function () {
     var _params = {
         renderer: undefined,

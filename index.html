@@ -23,7 +23,7 @@
     <script src="src/js/sevice/pageSevice.js"></script>
     <script src="src/js/sevice/animationSevice.js"></script>
     <script src="src/js/sevice/buttonSevice.js"></script>
-
+    <script src="src/js/shader/shader.js"></script>
     <script src="src/js/util/meshUtil.js"></script>
     <script src="src/js/util/sceneUtil.js"></script>
     <script src="src/js/util/textUtil.js"></script>
@@ -47,17 +47,18 @@
             projectSevice.sceneSevice.prototype.start(params);
             document.getElementById("WebGLOutput").appendChild(params.renderer.domElement);
             var uniforms={
-
+                
             };
+            console.log(projectShader.nomalShader_v);
             var shader ={
-                vertexShader:volumetricFog_v,
-                fragmentShader:volumetricFog_f,
+                vertexShader: projectShader.nomalShader_v,
+                fragmentShader: projectShader.nomalShader_f,
             };
             var material = new THREE.ShaderMaterial(shader); //重置纹理
             var geo = new THREE.BoxGeometry(2, 2, 2);
             var mesh=new THREE.Mesh(geo,material);
             params.scene.add(mesh);
-            console.log( params.scene);
+            console.log( material);
         }
 
         window.onload = init; //当网页加载后执行init方法
