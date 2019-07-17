@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>向顶点着色器传递数据</title>
+</head>
+
+<body>
+    <canvas id="webgl"></canvas>
+    <script>
+        const vertexShader=`
+            attribute vec4 a_position;
+            void main(){
+                gl_Position=a_position;
+                gl_PositionSize=100.0;
+            }
+        `
+        const fargmentShader=`
+            void main(){
+                gl_FragColor= vec4(1.0,0.0,0.0,1.0);
+            }
+        `
+        var canvas = document.getElementById("webgl");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var gl = canvas.getContext("webgl");
+
+        //指定清空canvas的颜色
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        //清空颜色缓冲
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        function initShader(gl,vertexShader,fargmentShader) {
+            _vertexShader= gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(_vertexShader,vertexShader);
+            gl.compileShader(_vertexShader);
+            if(!gl.getShaderParameter(_vertexShader,gl.Com))
+        }
+    </script>
+</body>
+
+</html>

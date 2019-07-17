@@ -127,7 +127,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 		var offset = new THREE.Vector3();
 
 		// so camera.up is the orbit axis
-		var quat = new THREE.Quaternion().setFromUnitVectors( object.up, new THREE.Vector3( 0, 1, 0 ) );
+		var   = new THREE.Quaternion().setFromUnitVectors( object.up, new THREE.Vector3( 0, 1, 0 ) );
 		var quatInverse = quat.clone().inverse();
 
 		var lastPosition = new THREE.Vector3();
