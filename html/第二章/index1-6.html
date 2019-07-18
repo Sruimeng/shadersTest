@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>鼠标点击变颜色</title>
+</head>
+
+<body>
+    <canvas id="webgl"></canvas>
+    <script>
+        const vertexShader = `
+            attribute vec4 a_position;
+            void main(){
+                gl_Position=a_position;
+                gl_PointSize=100.0;
+            }
+        `
+        const fargmentShader = `
+            precision mediump float;
+            uniform vec4 u_color;
+            void main(){
+                gl_FragColor= u_color;
+            }
+        `
+        let program;
+        var canvas = document.getElementById("webgl");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var gl = canvas.getContext("webgl");
+        program = initShader(gl, vertexShader, fargmentShader);
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        let a_position = gl.getAttribLocation(program, 'a_position');
+        let u_color = gl.getUniformLocation(program, 'u_color');
+        canvas.onmousedown = function (ev) {
+            click(ev, gl, canvas, a_position, u_color);
+        };
+        let arr = [];
+        function initShader(gl, vertexShader, fargmentShader) {
+            _vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(_vertexShader, vertexShader);
+            gl.compileShader(_vertexShader);
+            if (!gl.getShaderParameter(_vertexShader, gl.COMPILE_STATUS)) {
+                console.error(gl.getShaderInfoLog(_vertexShader));
+            }
+            _fargmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(_fargmentShader, fargmentShader);
+            gl.compileShader(_fargmentShader);
+            if (!gl.getShaderParameter(_fargmentShader, gl.COMPILE_STATUS)) {
+                console.error(gl.getShaderInfoLog(_fargmentShader));
+            }
+            _shaderProgram = gl.createProgram();
+            gl.attachShader(_shaderProgram, _vertexShader);
+            gl.attachShader(_shaderProgram, _fargmentShader);
+            gl.linkProgram(_shaderProgram);
+            gl.useProgram(_shaderProgram);
+            return _shaderProgram;
+        }
+
+        function click(ev, gl, canvas, a_position, u_color) {
+            let mouseX = ev.clientX, mouseY = ev.clientY;
+            let rect = ev.target.getBoundingClientRect();
+            let x = ((mouseX - rect.left) - canvas.height / 2) / (canvas.height / 2);
+            let y = ((canvas.width / 2) - (mouseY - rect.top)) / (canvas.width / 2);
+            if (x < 0 && y < 0) {
+                arr.push({ x: x, y: y, color: [0.0, 1.0, 0.0, 1.0] });
+            } else if (x > 0 && y > 0) {
+                arr.push({ x: x, y: y, color: [1.0, 1.0, 0.0, 1.0] });
+            } else {
+                arr.push({ x: x, y: y, color: [1.0, 1.0, 1.0, 1.0] });
+            }
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            for (let i = 0, length = arr.length; i < length; i++) {
+                gl.vertexAttrib3f(a_position, arr[i].x, arr[i].y, 0.0);
+                gl.uniform4f(u_color,arr[i].color[0],arr[i].color[1],arr[i].color[2],arr[i].color[3]);
+                //清空颜色缓冲
+                console.log(arr[i].x + "||||" + arr[i].y);
+                gl.drawArrays(gl.POINT, 0, 1);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
