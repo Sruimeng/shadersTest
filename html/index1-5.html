@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>向顶点着色器传递数据</title>
+    <title>鼠标点击</title>
 </head>
 
 <body>
@@ -28,10 +28,16 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         var gl = canvas.getContext("webgl");
-        program=initShader(gl,vertexShader,fargmentShader)
+        program=initShader(gl,vertexShader,fargmentShader);
+        
         let a_position=gl.getAttribLocation(program,'a_position');
-        console.log(a_position);
-        console.log(program);
+        canvas.onmousedown=function (ev) {
+            click(ev,gl,canvas,a_position);
+        }
+        function click(ev,gl,canvas,a_position){
+            console.log(ev);
+            //let mouseX=ev.
+        }
         gl.vertexAttrib3f(a_position,0.0,0.0,0.0);
         //指定清空canvas的颜色
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
