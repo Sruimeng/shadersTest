@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>四边形</title>
+</head>
+
+<body>
+    <canvas id="webgl"></canvas>
+    <script>
+        const vertexShader=`
+            attribute vec4 a_position;
+            void main(){
+                gl_Position=a_position;
+                gl_PointSize=2.0;
+            }
+        `
+        const fargmentShader=`
+            void main(){
+                gl_FragColor= vec4(1.0,1.0,1.0,1.0);
+            }
+        `
+        let program;
+        var canvas = document.getElementById("webgl");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var gl = canvas.getContext("webgl");
+        program=initShader(gl,vertexShader,fargmentShader)
+        let n=initVertexBuffers(program);
+
+        //指定清空canvas的颜色
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        //清空颜色缓冲
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        //gl.drawArrays(gl.TRIANGLES_STRIP,0,n);
+        gl.drawArrays(gl.TRIANGLES,0,n);
+        function initShader(gl,vertexShader,fargmentShader) {
+            _vertexShader= gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(_vertexShader,vertexShader);
+            gl.compileShader(_vertexShader);
+            if(!gl.getShaderParameter(_vertexShader,gl.COMPILE_STATUS)){
+                console.error(gl.getShaderInfoLog(_vertexShader));
+            }
+            _fargmentShader=gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(_fargmentShader,fargmentShader);
+            gl.compileShader(_fargmentShader);
+            if(!gl.getShaderParameter(_fargmentShader,gl.COMPILE_STATUS)){
+                console.error(gl.getShaderInfoLog(_fargmentShader));
+            }
+            _shaderProgram=gl.createProgram();
+            gl.attachShader(_shaderProgram,_vertexShader);
+            gl.attachShader(_shaderProgram,_fargmentShader);
+            gl.linkProgram(_shaderProgram);
+            gl.useProgram(_shaderProgram);
+            return _shaderProgram;
+        }
+
+        function initVertexBuffers(params) {
+            let x1={x:-1.0,y:0.0},x2={x:0.0,y:0.5},
+                x3={x:1.0,y:0.0},x4={x:0.0,y:-0.5};
+            let vertexArray=new Float32Array([
+                x1.x ,x1.y,
+                x3.x ,x3.y,
+                x2.x ,x2.y,
+                x3.x ,x3.y,
+                x4.x ,x4.y,
+                x1.x ,x1.y,
+            ]);
+            let n=6;
+            let vertexBuffer= gl.createBuffer();
+            if(!vertexBuffer){
+                console.error("vertexBuffer create error!");
+            }
+
+            gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
+
+            gl.bufferData(gl.ARRAY_BUFFER,vertexArray,gl.STATIC_DRAW);
+            let a_position=gl.getAttribLocation(program,'a_position');
+            gl.vertexAttribPointer(a_position,2,gl.FLOAT,false,0,0);
+            gl.enableVertexAttribArray(a_position);
+            return n;
+        }
+    </script>
+</body>
+
+</html>
